@@ -30,7 +30,6 @@
             android:layout_width="43dp"
             android:layout_height="38dp"
             android:background="@drawable/bg_genre_logo"
-            android:contentDescription="@string/genre_logo_content_description"
             android:padding="8dp"
             android:src="@drawable/ic_search_genre" />
     </LinearLayout>

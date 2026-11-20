@@ -23,15 +23,35 @@ import java.util.Map;
 public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHolder> {
 
     private final List<MangaModel> mangaList;
+    private final boolean horizontal;
     private final Map<String, String> chapterOverrides = new HashMap<>();
     private final Map<String, String> ratingOverrides = new HashMap<>();
 
+    //konstruktor lama tetap ada, otomatis mode vertikal (Home, SeeMore)
     public MangaAdapter(List<MangaModel> mangaList) {
+        this(mangaList, false);
+    }
+
+    //konstruktor dengan pilihan horizontal (dipakai FragmentSearch)
+    public MangaAdapter(List<MangaModel> mangaList, boolean horizontal) {
+        this.horizontal = horizontal;
         this.mangaList = new ArrayList<>();
 
         if (mangaList != null) {
             this.mangaList.addAll(mangaList);
         }
+    }
+
+    //ganti seluruh isi list (dipakai hasil search)
+    @SuppressLint("NotifyDataSetChanged")
+    public void setMangaList(List<MangaModel> newList) {
+        mangaList.clear();
+
+        if (newList != null) {
+            mangaList.addAll(newList);
+        }
+
+        notifyDataSetChanged();
     }
 
     // Infinite Scroll buat bagian See More Activity
@@ -71,7 +91,8 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHol
             }
         }
     }
-      // set rating API
+
+    // set rating API
     public void setRatingForManga(String mangaId, String rating) {
         if (mangaId == null || rating == null || rating.trim().isEmpty()) {
             return;
@@ -93,8 +114,13 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHol
     public MangaViewHolder onCreateViewHolder(
             @NonNull ViewGroup parent, int viewType) {
 
+        // pilih layout sesuai mode
+        int layoutId = horizontal
+                ? R.layout.item_manga_horizontal
+                : R.layout.item_manga;
+
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_manga, parent, false);
+                .inflate(layoutId, parent, false);
 
         return new MangaViewHolder(view);
     }
@@ -121,6 +147,13 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHol
         }
 
         holder.tvTitle.setText(title);
+
+
+        if (holder.tvDescription != null) {
+            String desc = manga.getAttributes() != null
+                    ? manga.getAttributes().getDescriptionText() : null;
+            holder.tvDescription.setText(desc != null ? desc : "");
+        }
 
         // 2. Set Rating e
         String rating = ratingOverrides.get(manga.getId());
@@ -195,7 +228,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHol
 
     public static class MangaViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvTitle, tvRating, tvChapter, tvStatus;
+        TextView tvTitle, tvRating, tvChapter, tvStatus, tvDescription;
         ImageView imgCover;
 
         public MangaViewHolder(@NonNull View itemView) {
@@ -206,6 +239,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.MangaViewHol
             tvChapter = itemView.findViewById(R.id.tvChapter);
             tvStatus = itemView.findViewById(R.id.tvStatus);
             imgCover = itemView.findViewById(R.id.imgCover);
+            tvDescription = itemView.findViewById(R.id.tvDescription); // [BARU] null di item_manga
         }
     }
 }
