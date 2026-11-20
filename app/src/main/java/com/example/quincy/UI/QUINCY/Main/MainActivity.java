@@ -24,14 +24,14 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
 
-        // 1. Tampilkan HomeFragment secara default saat pertama kali dibuka
+        // 1. HomeFragment secara saat pertama dibuka quincy e
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new FragmentHome())
                     .commit();
         }
 
-        // 2. Set listener saat menu bottom navigation diklik
+        // 2. Set listener e gae navigation bar e
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

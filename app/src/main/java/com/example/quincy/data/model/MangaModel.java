@@ -1,4 +1,3 @@
-
 package com.example.quincy.data.model;
 
 import com.google.gson.annotations.SerializedName;
@@ -29,7 +28,7 @@ public class MangaModel {
         return relationships;
     }
 
-    // Mengambil nama file cover
+    // Mngambil nama file cover
     public String getCoverFileName() {
         if (relationships == null) {
             return null;
@@ -46,7 +45,7 @@ public class MangaModel {
         return null;
     }
 
-    // Membuat URL cover MangaDex
+    //  URL cover MangaDex
     public String getCoverUrl() {
         String fileName = getCoverFileName();
 
@@ -58,7 +57,7 @@ public class MangaModel {
         return null;
     }
 
-    // Data atribut manga
+
     public static class Attributes {
 
         @SerializedName("title")
@@ -70,6 +69,11 @@ public class MangaModel {
         @SerializedName("lastChapter")
         private String lastChapter;
 
+        @SerializedName("status")
+        private String status;
+
+        private String rating = "N/A";
+
         public Map<String, String> getTitle() {
             return title;
         }
@@ -78,7 +82,6 @@ public class MangaModel {
             return description;
         }
 
-        // Mengambil judul bahasa Inggris jika tersedia
         public String getEnglishTitle() {
             if (title != null) {
                 if (title.containsKey("en")
@@ -118,9 +121,21 @@ public class MangaModel {
         public String getLastChapter() {
             return lastChapter;
         }
+
+        public String getStatus() {
+            return status != null ? status : "ongoing";
+        }
+
+        public String getRating() {
+            return rating;
+        }
+
+        public void setRating(String rating) {
+            this.rating = rating;
+        }
     }
 
-    // Relasi manga, termasuk cover art
+    // Relasi manga, termasuk cover art e
     public static class Relationship {
 
         @SerializedName("id")
@@ -145,7 +160,7 @@ public class MangaModel {
         }
     }
 
-    // Atribut file cover
+    // atribut file cover
     public static class CoverAttributes {
 
         @SerializedName("fileName")

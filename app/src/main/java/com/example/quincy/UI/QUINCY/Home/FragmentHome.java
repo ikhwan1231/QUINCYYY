@@ -1,4 +1,3 @@
-
 package com.example.quincy.UI.QUINCY.Home;
 
 import android.content.Intent;
@@ -67,7 +66,7 @@ public class FragmentHome extends Fragment {
         mangaViewModel = new ViewModelProvider(this)
                 .get(MangaViewModel.class);
 
-        // Latest Manga
+        // Latest Manga e
         mangaViewModel.getLatestMangaList(10, 0)
                 .observe(getViewLifecycleOwner(), mangaList -> {
 
@@ -78,10 +77,11 @@ public class FragmentHome extends Fragment {
                         rvLatestManga.setAdapter(adapter);
 
                         loadChapters(mangaList, adapter);
+                        loadRatings(mangaList, adapter); // <-- Load Rating untuk Latest
                     }
                 });
 
-        // Most Popular Manga
+        // Most Popular Manga e
         mangaViewModel.getPopularMangaList(10, 0)
                 .observe(getViewLifecycleOwner(), mangaList -> {
 
@@ -92,10 +92,11 @@ public class FragmentHome extends Fragment {
                         rvMostPopular.setAdapter(adapter);
 
                         loadChapters(mangaList, adapter);
+                        loadRatings(mangaList, adapter); // <-- Load Rating untuk Popular
                     }
                 });
 
-        // See More Latest
+        // See More Latest e
         tvSeeMoreLatest.setOnClickListener(v -> {
             Intent intent = new Intent(
                     requireContext(), SeeMoreActivity.class);
@@ -104,7 +105,7 @@ public class FragmentHome extends Fragment {
             startActivity(intent);
         });
 
-        // See More Popular
+        // See More Popular e
         tvSeeMorePopular.setOnClickListener(v -> {
             Intent intent = new Intent(
                     requireContext(), SeeMoreActivity.class);
@@ -114,7 +115,7 @@ public class FragmentHome extends Fragment {
         });
     }
 
-    // Memuat nomor chapter untuk setiap manga
+    // Memuat nomor chapter untuk setiap manga e
     private void loadChapters(
             List<MangaModel> mangaList,
             MangaAdapter adapter) {
@@ -131,6 +132,28 @@ public class FragmentHome extends Fragment {
                         if (chapter != null && !chapter.trim().isEmpty()) {
                             adapter.setChapterForManga(
                                     manga.getId(), chapter);
+                        }
+                    });
+        }
+    }
+
+    // Memuat rating statistik untuk setiap manga e
+    private void loadRatings(
+            List<MangaModel> mangaList,
+            MangaAdapter adapter) {
+
+        for (MangaModel manga : mangaList) {
+
+            if (manga.getId() == null) {
+                continue;
+            }
+
+            mangaViewModel.getMangaRating(manga.getId())
+                    .observe(getViewLifecycleOwner(), rating -> {
+
+                        if (rating != null && !rating.trim().isEmpty()) {
+                            adapter.setRatingForManga(
+                                    manga.getId(), rating);
                         }
                     });
         }
