@@ -8,7 +8,10 @@ import com.example.quincy.data.API.ApiService;
 import com.example.quincy.data.model.MangaModel;
 import com.example.quincy.data.model.MangaResponse;
 import com.example.quincy.data.model.ChapterResponse;
+import com.example.quincy.data.model.TagModel;
+import com.example.quincy.data.model.TagResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -141,5 +144,56 @@ public class MangaRepository {
         });
 
         return liveData;
+    }
+
+    // Cari manga berdasarkan judul + filter genre dan status
+    public LiveData<List<MangaModel>> searchManga(String title, List<String> genreIds,
+                                                  List<String> statuses, int limit, int offset) {
+        MutableLiveData<List<MangaModel>> liveData = new MutableLiveData<>();
+
+        apiService.searchManga(title, limit, offset, "cover_art", "desc",
+                genreIds, "AND", statuses).enqueue(new Callback<MangaResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<MangaResponse> call, @NonNull Response<MangaResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    liveData.setValue(response.body().getData());
+                } else {
+                    liveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MangaResponse> call, @NonNull Throwable t) {
+                liveData.setValue(null);
+            }
+        });
+
+        return liveData;
+    }
+
+    // Ambil genre dari API (group == "genre")
+    public void fetchGenres(MutableLiveData<List<TagModel>> target) {
+        apiService.getTags().enqueue(new Callback<TagResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<TagResponse> call, @NonNull Response<TagResponse> response) {
+                if (response.isSuccessful() && response.body() != null
+                        && response.body().getData() != null) {
+                    List<TagModel> genres = new ArrayList<>();
+                    for (TagModel tag : response.body().getData()) {
+                        if ("genre".equals(tag.getGroup()) && tag.getName() != null) {
+                            genres.add(tag);
+                        }
+                    }
+                    target.setValue(genres);
+                } else {
+                    target.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TagResponse> call, @NonNull Throwable t) {
+                target.setValue(null);
+            }
+        });
     }
 }

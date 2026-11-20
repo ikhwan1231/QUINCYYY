@@ -2,6 +2,9 @@ package com.example.quincy.data.API;
 
 import com.example.quincy.data.model.MangaResponse;
 import com.example.quincy.data.model.ChapterResponse;
+import com.example.quincy.data.model.TagResponse;
+
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -43,4 +46,21 @@ public interface ApiService {
     Call<ResponseBody> getMangaStatistics(
             @Path("id") String mangaId
     );
+
+    // Cari manga berdasarkan judul + filter genre dan status
+    @GET("manga")
+    Call<MangaResponse> searchManga(
+            @Query("title") String title,
+            @Query("limit") int limit,
+            @Query("offset") int offset,
+            @Query("includes[]") String includeCover,
+            @Query("order[relevance]") String orderRelevance,
+            @Query("includedTags[]") List<String> includedTags,
+            @Query("includedTagsMode") String includedTagsMode,
+            @Query("status[]") List<String> statuses
+    );
+
+    // daftar tag (genre, tema, dll)
+    @GET("manga/tag")
+    Call<TagResponse> getTags();
 }
