@@ -3,5 +3,5 @@
     <string name="quincy" />
     <string name="search_results_title">Search Result</string>
     <string name="cari_judul">Ketik judul manga yang ingin anda cari</string>"
-    <string name="total_pencarian">Menampilkan total ... manga yang anda cari</string>
-</resources>
+    <string name="total_pencarian">Total manga yang anda cari</string>
+</resources> 
