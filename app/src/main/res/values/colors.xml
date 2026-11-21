@@ -7,4 +7,14 @@
     <color name="text_secondary">#9A9AA8</color>
     <color name="surface">#24242C</color>
     <color name="stroke">#33333F</color>
+    <color name="quincy_bg">#121212</color>
+    <color name="quincy_card">#141414</color>
+    <color name="quincy_card_border">#C62828</color>
+    <color name="quincy_input">#171717</color>
+    <color name="quincy_input_border">#2C2C2C</color>
+    <color name="quincy_dark_btn">#1C1C1C</color>
+    <color name="quincy_red">#C62828</color>
+    <color name="quincy_text">#FFFFFF</color>
+    <color name="quincy_text_muted">#9A9A9A</color>
+    <color name="quincy_hint">#5E5E5E</color>
 </resources>
